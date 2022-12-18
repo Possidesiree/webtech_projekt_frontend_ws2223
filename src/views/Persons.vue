@@ -27,20 +27,6 @@ export default {
   data () {
     return {
       persons: [
-        {
-          id: 10,
-          name: 'Max Mustermann',
-          adresse: 'sandstr.45, 12342 Berlin',
-          email: 'muster.23@gmail.com',
-          rolle: 'MITARBEITER'
-        },
-        {
-          id: 11,
-          name: 'Lola Meist',
-          adresse: 'boringstr.34, 89772 Berlin',
-          email: 'meislo22@gmail.com',
-          rolle: 'KUNDE'
-        }
       ]
     }
   },
