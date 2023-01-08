@@ -1,56 +1,81 @@
 <template>
-  <h1>Welcome to Persons</h1>
-  <div class="container-fluid">
-    <div class="row row-cols-1 row-cols-md-4 g-4">
-      <div class="col" v-for="person in persons" :key="person.id">
-        <div class="card h-100">
-          <img :src="getAvatar(person)" class="card-img-top" :alt="person.name">
-          <!-- <img :src="getAvatar(person)" class="card-img-top" :alt="person.firstName + ' ' + person.lastName">-->
-          <div class="card-body">
-            <p class="card-text">
-              {{ person.name }} ist ein(e) {{ person.rolle }} , wohnt in {{person.adresse}}
-              und ist über folgende emailAdresse erreichbar: {{ person.email }}.
-              <!--{{ person.firstName }} {{ person.lastName }} ist {{ person.friseur ? 'friseur' : 'nicht friseur' }} und
-              hat {{ person.pets.length }} Friseur_diplom(e).-->
-            </p>
-          </div>
-        </div>
+  <form v-if="!authenticated">
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="text" class="form-control" id="email" v-model="email" required>
+      <div class="invalid-feedback">
+        Please provide the email.
       </div>
     </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" v-model="password" required>
+      <div class="invalid-feedback">
+        Please provide the password.
+      </div>
+    </div>
+    <div>
+      <button class="btn btn-primary" type="submit" @click.prevent="authenticate">Login</button>
+    </div>
+  </form>
+  <div v-else>
+    <button class="btn btn-primary" @click.prevent="logout">Logout</button>
   </div>
+  <div v-if="error" class="mt-3">
+    <label class="text-danger">Login Fehler ! </label>
+  </div>
+  <persons-create-form></persons-create-form>
 </template>
 
 <script>
+import PersonsCreateForm from '@/components/PersonsCreateForm'
+import router from '@/router'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Persons',
+  components: {
+    PersonsCreateForm
+  },
   data () {
     return {
-      persons: [
-      ]
+      email: '',
+      password: '',
+      error: false,
+      authenticated: localStorage.getItem('token') != null
     }
   },
   methods: {
-    getAvatar (person) {
-      if (person.rolle === 'MITARBEITER') {
-        return require('../assets/mitarbeiter.png')
-      } else if (person.rolle === 'KUNDE') {
-        return require('../assets/kunde.png')
+    logout () {
+      localStorage.removeItem('token')
+      router.push('termine')
+    },
+    async authenticate () {
+      const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/authenticate'
+      const headers = new Headers()
+      headers.append('Content-Type', 'application/json')
+      const termin = JSON.stringify({
+        email: this.email,
+        password: this.password
+      })
+      const requestOptions = {
+        method: 'POST',
+        headers: headers,
+        body: termin,
+        redirect: 'follow'
+      }
+      const response = await fetch(endpoint, requestOptions)
+      this.handleResponse(response)
+    },
+    handleResponse (response) {
+      if (response.ok) {
+        this.error = false
+        debugger
+        localStorage.setItem('token', JSON.stringify(response.json))
+        router.push('termine')
+      } else {
+        this.error = true
       }
     }
-  },
-  mounted () {
-    const requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
-    }
-
-    fetch('http://localhost:8080/api/v1/persons', requestOptions)
-      .then(response => response.json())
-      .then(result => result.forEach(person => {
-        this.persons.push(person)
-      }))
-      .catch(error => console.log('error', error))
   }
 }
 </script>
