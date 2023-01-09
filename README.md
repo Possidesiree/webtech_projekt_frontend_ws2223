@@ -19,7 +19,7 @@ About: ![img_1.png](img_1.png)
 
 *Login:
 ![img_4.png](img_4.png)
-![img_2.png](img_2.png)
+![img_12.png](img_12.png)
 - Danach hat der/die Nutzer_in die Möglichkeit, einen Termin zu vereinbaren. Ein Termin kann vereinbart werden, nur wenn man angemeldet ist Dazu muss er/sie den gewünschten Tag
   eingeben, an dem er/sie einen Termin haben möchte. der/die Nutzer_in wählt dann die gewünschte Uhrzeit und den Tag und die Leistung aus und
   bestätigt den Termin:
