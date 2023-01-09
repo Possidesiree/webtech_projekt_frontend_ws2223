@@ -15,7 +15,7 @@ About: ![img_1.png](img_1.png)
 - Auf der Seite kann sich der/die Nutzer_in entweder registrieren oder anmelden, wenn er bereits ein Benutzerkonto hat.
 
 *Registrierung:
-- ![img_3.png](img_3.png)
+- ![img_11.png](img_11.png)
 
 *Login:
 ![img_4.png](img_4.png)
