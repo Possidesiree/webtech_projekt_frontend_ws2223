@@ -17,6 +17,9 @@
     <div>
       <button class="btn btn-primary" type="submit" @click.prevent="authenticate">Login</button>
     </div>
+    <div class="mb-1">
+      <label class="text-info">{{ 'Noch kein Konto? Hier registrieren!' }} </label>
+    </div >
   </form>
   <div v-else>
     <button class="btn btn-primary" @click.prevent="logout">Logout</button>
@@ -63,23 +66,28 @@ export default {
         body: termin,
         redirect: 'follow'
       }
-      const response = await fetch(endpoint, requestOptions)
-      this.handleResponse(response)
-    },
-    handleResponse (response) {
-      if (response.ok) {
-        this.error = false
-        debugger
-        localStorage.setItem('token', JSON.stringify(response.json))
-        router.push('termine')
-      } else {
-        this.error = true
-      }
+      fetch(endpoint, requestOptions)
+        .then(response => response.json())
+        .then((json) => {
+          this.error = false
+          localStorage.setItem('token', JSON.stringify(json))
+          debugger
+          router.push('termine')
+        })
+        .catch((err) => {
+          console.log(err)
+          this.error = true
+        })
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style lang="css" scoped>
+body{
+  background-image: url(https://wallpaperaccess.com/full/813662.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
 </style>

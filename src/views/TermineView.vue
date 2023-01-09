@@ -5,6 +5,9 @@
       <div class="mb-2">
         <label class="me-2">Tag und Uhrzeit</label>
         <input type="datetime-local" id="tag" v-model="datetime" required>
+        <div class="invalid-feedback">
+          Please provide the datetime.
+        </div>
       </div>
       <div class="mb-2">
         <label class="me-2">Leistung</label>
@@ -19,13 +22,19 @@
           <option value="AMERICAN_STYLE">American Style: 255$</option>
           <option value="HAARE_GLAETTEN">Haare Glätten: 250$</option>
         </select>
+        <div class="invalid-feedback">
+          Please provide the Leistung.
+        </div>
       </div>
       <div>
         <button class="btn btn-primary" type="submit" @click.prevent="saveTermin">Save</button>
       </div>
     </form>
     <div v-if="terminErstellt" class="mt-3">
-      <label class="text-info">{{ 'Termin erfolgreich gespeichert ! Reservierungsnummer: ' + reservierungsNummer }}</label>
+      <label class="text-info">{{ 'Termin erfolgreich gespeichert ! Reservierungsnummer: ' + reservierungsNummer + '.' }}</label>
+      <div class="mb-4">
+        <label class="text-info">{{ 'Bitte notieren Sie sich Ihre Reservierungsnummer!' }} </label>
+      </div>
     </div>
     <div v-if="error" class="mt-3">
       <label class="text-danger">Termin konnte nicht gespeichert werden, unbekannter Fehler ! </label>
@@ -50,7 +59,7 @@ export default {
   methods: {
     async saveTermin () {
       if (this.datetime && this.leistung) {
-        const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/termin'
+        const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/salon/termin'
         const headers = new Headers()
         headers.append('Content-Type', 'application/json')
         const user = JSON.parse(localStorage.getItem('token'))
@@ -65,17 +74,17 @@ export default {
           body: termin,
           redirect: 'follow'
         }
-        const response = await fetch(endpoint, requestOptions)
-        this.handleResponse(response)
-      }
-    },
-    handleResponse (response) {
-      if (response.ok) {
-        this.error = false
-        this.reservierungsNummer = response.json.reservierungsNummer
-        this.terminErstellt = true
-      } else {
-        this.error = true
+        fetch(endpoint, requestOptions)
+          .then(response => response.json())
+          .then(json => {
+            this.error = false
+            this.reservierungsNummer = json.reservierungsNummer
+            this.terminErstellt = true
+          })
+          .catch(err => {
+            console.log(err)
+            this.error = true
+          })
       }
     }
   },
@@ -87,6 +96,15 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="css" scoped>
+*{
+  margin: 0;
+  padding: 0;
+}
+.background-image{
+  background-image: url(https://wallpaperaccess.com/full/813662.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
 </style>

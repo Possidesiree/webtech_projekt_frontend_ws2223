@@ -1,8 +1,7 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Herzlich willkommen auf der Seite unseres Salons  Beauty!
-                     Wir machen den Unterschied."/>
+    <HelloWorld msg="Herzlich willkommen auf der Webseite unseres Salons Beauty!"/>
   </div>
 </template>
 
@@ -16,4 +15,5 @@ export default {
     HelloWorld
   }
 }
+
 </script>
